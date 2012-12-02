@@ -1,0 +1,5 @@
+; $Id$
+name = Coop ID
+description = Add Coop IDs to new memberships
+core = 6.x
+dependencies[] = civicrm

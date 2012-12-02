@@ -1,0 +1,449 @@
+<?php
+// $Id$
+
+require_once('uc_buyingclub.finalization.inc');
+
+/*
+ * The label of the "Would buy more" attribute.
+ */
+define('UC_BUYINGCLUB_WOULD_BUY_MORE_LABEL', 'Would you buy an extra unit of this item if we needed more to meet our minimum?');
+
+/*
+ * hooks
+ */
+function uc_buyingclub_help($path, $arg) {
+  $output = '';
+  switch ($path) {
+    case "admin/help#uc_buyingclub":
+      $output = '<p>'. t("Views and forms for running a buying club with Ubercart"). '</p>';
+      break;
+  }
+  return $output;
+}
+
+function uc_buyingclub_perm() {
+  return array('access uc_buyingclub', 'create uc_buyingclub', 'administer uc_buyingclub', 'access uc_buyingclub reports');
+}
+
+function uc_buyingclub_menu() {
+  $items = array();
+
+  $items['buyingclub/finalize'] = array(
+    'title' => "Buying Club: Finalize orders",
+    'access arguments' => array('administer uc_buyingclub'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('uc_buyingclub_finalization_form'),
+  );
+
+  $items['buyingclub/finalize/received'] = array(
+    'title' => "Buying Club: Finalize received items",
+    'access arguments' => array('administer uc_buyingclub'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('uc_buyingclub_received_items_form'),
+  );
+
+  $items['buyingclub/view/finalized'] = array(
+    'title' => "Buying Club: View finalized orders",
+    'access arguments' => array('administer uc_buyingclub'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_view_finalized_orders',
+    'file' => 'uc_buyingclub.pages.inc',
+  );
+
+  $items['buyingclub/view/finalized/by_user'] = array(
+    'title' => "Buying Club: View finalized orders by user",
+    'access arguments' => array('access uc_buyingclub reports'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_view_finalized_orders_by_user',
+    'file' => 'uc_buyingclub.pages.inc',
+  );
+
+  $items['buyingclub/view/finalized/by_distributor'] = array(
+    'title' => "Buying Club: View finalized orders by distributor",
+    'access arguments' => array('access uc_buyingclub reports'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_view_finalized_orders_by_distributor',
+    'file' => 'uc_buyingclub.pages.inc',
+  );
+
+  $items['buyingclub/view/overstock'] = array(
+    'title' => "Buying Club: View expected overstock",
+    'access arguments' => array('access uc_buyingclub reports'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_view_overstock',
+    'file' => 'uc_buyingclub.pages.inc',
+  );
+
+  $items['buyingclub/view/periods'] = array(
+    'title' => "Buying Club: View ordering periods",
+    'access arguments' => array('administer uc_buyingclub'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_view_ordering_periods',
+    'file' => 'uc_buyingclub.pages.inc',
+  );
+
+  $items['buyingclub/view/reports'] = array(
+    'title' => "Buying Club: View reports",
+    'access arguments' => array('access uc_buyingclub reports'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_view_reports',
+    'file' => 'uc_buyingclub.pages.inc',
+  );
+
+  $items['buyingclub/export/finalized/distributor/%/%/csv'] = array(
+    'access arguments' => array('access uc_buyingclub reports'),
+    'page arguments' => array(4, 5),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_download_finalized',
+    'file' => 'uc_buyingclub.export.inc',
+  );
+
+  $items['buyingclub/export/grid/%/csv'] = array(
+    'access arguments' => array('access uc_buyingclub reports'),
+    'page arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_download_grid',
+    'file' => 'uc_buyingclub.export.inc',
+  );
+
+  $items['buyingclub/export/invoices/%/xls'] = array(
+    'access arguments' => array('access uc_buyingclub reports'),
+    'page arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_download_invoices',
+    'file' => 'uc_buyingclub.export.inc',
+  );
+
+  $items['buyingclub/export/order_list/%/csv'] = array(
+    'access arguments' => array('access uc_buyingclub reports'),
+    'page arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_download_order_list',
+    'file' => 'uc_buyingclub.export.inc',
+  );
+
+  $items['buyingclub/export/check_in/%/xls'] = array(
+    'access arguments' => array('access uc_buyingclub reports'),
+    'page arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_download_check_in_list',
+    'file' => 'uc_buyingclub.export.inc',
+  );
+
+  $items['buyingclub/export/check_out/%/xls'] = array(
+    'access arguments' => array('access uc_buyingclub reports'),
+    'page arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_download_check_out_list',
+    'file' => 'uc_buyingclub.export.inc',
+  );
+
+  $items['buyingclub/export/overstock/%/xls'] = array(
+    'access arguments' => array('access uc_buyingclub reports'),
+    'page arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_download_overstock',
+    'file' => 'uc_buyingclub.export.inc',
+  );
+
+  $items['buyingclub/export/by_product/%/xls'] = array(
+    'access arguments' => array('access uc_buyingclub reports'),
+    'page arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'uc_buyingclub_download_by_product',
+    'file' => 'uc_buyingclub.export.inc',
+  );
+
+  return $items;
+}
+
+function uc_buyingclub_token_values($type, $object = NULL, $options = array()) {
+  if ($type == 'order') {
+    $period = _uc_buyingclub_get_most_recent_ordering_period();
+    $date_format = 'l\, M jS';
+    $tokens['order-pickup-date'] = '6pm - 9pm on '. date($date_format, $period->pickup);
+    return $tokens;
+  }
+}
+
+function uc_buyingclub_token_list($type = 'all') {
+  $tokens = array();
+  if ($type == 'order' || $type == 'all') {
+    $tokens['order']['order-pickup-date'] = t('The next pickup date');
+    return $tokens;
+  }
+}
+
+function uc_buyingclub_theme() {
+  return array(
+    'uc_buyingclub_finalization_form' => array(
+      'arguments' => array('form', NULL)
+    ),
+    'uc_buyingclub_received_items_form' => array(
+      'arguments' => array('form', NULL)
+    )
+  );
+}
+
+function uc_buyingclub_mail($key, &$message, $params) {
+  $language = $message['language'];
+  $variables = user_mail_tokens($params['account'], $language);
+  
+  $store_values = uc_store_token_values('global');
+  $buying_club_name = $store_values['store-name'];
+
+  switch ($key) {
+    case 'final_order':
+      $message['headers'] = array(
+        'MIME-Version' => '1.0',
+        'Content-Type' => 'text/html',
+        'From' => 'Greene Hill Food Co-op Merchandising Committee <merchandising@greenehillfoodcoop.com>', # TODO make configurable
+      );
+      $message['subject'] = t('Finalized '. $buying_club_name .' order', $variables, $language->language);
+
+      $first_name = $params['first_name'];
+
+      $body = <<<EOT
+<html>
+    <body>
+        <table align="center" cellpadding="0" cellspacing="0" style="font-family: Helvetica,Arial,sans-serif; font-size: 1em; color: rgb(25, 25, 25);" width="700">
+            <tbody>
+                <tr>
+                    <td><img alt="Greene Hill Food Co-op" height="282" src="http://members.greenehillfoodcoop.com/images/newsletter_header_5.jpg" width="700" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <table align="center" cellpadding="10px" cellspacing="0" style="font-family: Helvetica,Arial,sans-serif; font-size: 1em; color: rgb(25, 25, 25);" width="628px">
+            <tbody>
+                 <tr align="center" border="0" cellpadding="0" cellspacing="0" style="background: none repeat scroll 0% 0% rgb(255, 255, 255); font-family: Helvetica,Arial,sans-serif; font-size: 1em;" width="628">
+                     <td style="text-align: left;">
+                         <div style="display: inline; font-family: Impact,Arial Black,sans-serif; font-size: 1.6em; letter-spacing: 0.05em; word-spacing: 0.05em; text-transform: uppercase; color: rgb(102, 0, 0);">Buying Club Invoice</div>
+                            <p>Hello $first_name,</p>
+                            <p>This is your invoice for your most recent order.</p>
+                            <table cellpadding="3">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quanity Desired</th>
+                                    <th>Quantity You Will Receive</th>
+                                    <th>Cost</th>
+                                </tr>
+                                <tbody>
+EOT;
+
+      foreach ($params['products_given'] as $product => $given) {
+        $body .= '<tr>';
+        $body .= '<td>'. $product .'</td>';
+        $body .= '<td>'. $params['products_desired'][$product] .'</td>';
+        $body .= '<td>'. $params['products_given'][$product] .'</td>';
+        $body .= '<td>'. uc_currency_format($params['products_cost'][$product]) .'</td>';
+        $body .= '</tr>';
+      }
+
+      $formatted_total = uc_currency_format($params['total_cost']);
+      $pickup_date = $params['pickup_date'];
+
+      # TODO make configurable
+      $body .= <<<EOT
+                                </tbody>
+                            </table>
+                            <p>Your estimated, preliminary subtotal is <b>$formatted_total</b></p>
+                            <p>Please remember that this total will likely be slightly different on pickup day. The weights of some items, such as meat, will vary, and there is always the chance that some items will not be delivered. So, please, bring a blank check when you pick up your food.</p>
+                            <p>See you at 18 Putnam Avenue on pickup day: $pickup_date.</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
+EOT;
+
+      $message['body'] = $body;
+      break;
+  }
+}
+
+
+/*
+ * data access for order finalization
+ */
+
+/*
+ * was the ordering period with the given $start and $end already finalized?
+ */
+function _uc_buyingclub_already_finalized($start, $end) {
+  $query = "SELECT count(op.order_product_id) AS num ".
+    "FROM {uc_orders} o, {uc_order_products} op, {uc_buyingclub_order_products} bop ".
+    "WHERE op.order_id=o.order_id AND bop.order_product_id = op.order_product_id ".
+      "AND o.created > %d AND o.created < %d ";
+  $result = db_query($query, $start, $end);
+  return $result && db_fetch_object($result)->num > 0;
+}
+
+function _uc_buyingclub_get_orders_to_finalize($start, $end) {
+  $distributor_table = _uc_buyingclub_get_distributor_table();
+  $distributor_column = _uc_buyingclub_get_distributor_column();
+
+  $minimum_order_table = _uc_buyingclub_get_minimum_order_table();
+  $minimum_order_column = _uc_buyingclub_get_minimum_order_column();
+
+  $query = "SELECT p.title AS product_name, p.nid AS product_id, SUM(op.qty) AS order_product_qty, d.title AS distributor_name, ctd2.". $minimum_order_column ." AS minimum_order ".
+    "FROM {uc_orders} o, {uc_order_products} op, {node} p, {node} d, {". $distributor_table ."} ctd, {". $minimum_order_table ."} ctd2 ".
+    "WHERE op.order_id=o.order_id AND p.nid=op.nid ".
+      "AND o.created > %d AND o.created < %d AND o.order_status='pending' ".
+      "AND ctd.vid=p.vid AND ctd.". $distributor_column ."=d.nid ".
+      "AND ctd2.vid=p.vid ".
+    "GROUP BY p.nid ".
+    "ORDER BY d.title, p.title ";
+
+  return db_query($query, $start, $end);
+}
+
+/*
+ * get an array of product ids to the number of members who said they'd buy an extra of it to meet minimums
+ */
+function _uc_buyingclub_get_would_buy_more_qty($start, $end) {
+  $query = "SELECT p.nid AS product_id, COUNT(*) AS would_buy_more_qty ".
+    "FROM {uc_orders} o, {uc_order_products} op, {node} p ".
+    "WHERE op.order_id=o.order_id AND p.nid=op.nid ".
+      "AND o.created > %d AND o.created < %d AND o.order_status='pending' ".
+      "AND op.data LIKE '%%%s%%' ".
+    "GROUP BY p.nid ";
+
+  $arr = array();
+
+  $query_result = db_query($query, $start, $end, UC_BUYINGCLUB_WOULD_BUY_MORE_LABEL);
+  if ($query_result) {
+    while ($row = db_fetch_object($query_result)) {
+      $arr[$row->product_id] = (int)$row->would_buy_more_qty;
+    }
+  }
+
+  return $arr;
+}
+
+/*
+ * data access for overstock
+ */
+function _uc_buyingclub_get_overstock($ordering_period_id) {
+  $unit_table = _uc_buyingclub_get_unit_table();
+  $unit_column = _uc_buyingclub_get_unit_column();
+
+  $query = "SELECT p.title as 'item', unit_table.". $unit_column ." as unit, pr.sell_price as 'member price', bp.qty_overstock as 'expected overstock' ".
+    "FROM {node} p, {uc_products} pr, {uc_buyingclub_products} bp, {". $unit_table ."} unit_table ".
+    "WHERE pr.nid=p.nid and bp.product_id=p.nid AND bp.ordering_period_id=%d ".
+      "AND unit_table.vid=p.vid ".
+      "AND bp.uc_buyingclub_product_id = ( ".
+        "SELECT bp2.uc_buyingclub_product_id ".
+        "FROM {uc_buyingclub_products} bp2 ".
+        "WHERE bp2.product_id = bp.product_id ".
+        "ORDER BY bp2.finalized DESC ".
+        "LIMIT 1 ".
+      ") ".
+      "AND bp.qty_overstock > 0 ".
+    "ORDER BY p.title";
+
+  return db_query($query, $ordering_period_id);
+}
+
+/*
+ * ordering period data access
+ */
+
+/*
+ * Get ordering period by specified start and end times.
+ */
+function _uc_buyingclub_get_ordering_period($start, $end) {
+  $query = "SELECT p.ordering_period_id, p.start, p.end ".
+    "FROM {uc_buyingclub_ordering_periods} p ".
+    "WHERE p.start = %d AND p.end = %d ".
+    "LIMIT 1";
+
+  $query_result = db_query($query, $start, $end);
+
+  if ($query_result) {
+    $period = db_fetch_object($query_result);
+  }
+
+  return $period;
+}
+
+/*
+ * Get most recent/current ordering period based on the current time.
+ */
+function _uc_buyingclub_get_most_recent_ordering_period() {
+  $query = "SELECT p.start, p.end, p.pickup, p.ordering_period_id ".
+    "FROM {uc_buyingclub_ordering_periods} p ".
+    "WHERE p.start < %d ".
+    "ORDER BY p.start DESC ".
+    "LIMIT 1";
+
+  $query_result = db_query($query, time());
+
+  if ($query_result) {
+    $period = db_fetch_object($query_result);
+  }
+
+  return $period;
+}
+
+/*
+ * Get next (not current) ordering period based on the current time.
+ */
+function _uc_buyingclub_get_next_ordering_period() {
+  $query = "SELECT p.start, p.end ".
+    "FROM {uc_buyingclub_ordering_periods} p ".
+    "WHERE p.start > %d ".
+    "ORDER BY p.start ASC ".
+    "LIMIT 1";
+
+  $query_result = db_query($query, time());
+
+  if ($query_result) {
+    $period = db_fetch_object($query_result);
+  }
+
+  return $period;
+}
+
+function _uc_buyingclub_get_distributor_column() {
+  $distributor_db_info = content_database_info(content_fields('field_distributor')); 
+  return $distributor_db_info['columns']['nid']['column'];
+}
+
+function _uc_buyingclub_get_distributor_table() {
+  $distributor_db_info = content_database_info(content_fields('field_distributor')); 
+  return $distributor_db_info['table'];
+}
+
+function _uc_buyingclub_get_minimum_order_column() {
+  $db_info = content_database_info(content_fields('field_minimum_order')); 
+  return $db_info['columns']['value']['column'];
+}
+
+function _uc_buyingclub_get_minimum_order_table() {
+  $db_info = content_database_info(content_fields('field_minimum_order')); 
+  return $db_info['table'];
+}
+
+function _uc_buyingclub_get_unit_column() {
+  $db_info = content_database_info(content_fields('field_unit')); 
+  return $db_info['columns']['value']['column'];
+}
+
+function _uc_buyingclub_get_unit_table() {
+  $db_info = content_database_info(content_fields('field_unit')); 
+  return $db_info['table'];
+}
+
+/*
+ * Get a line describing the ordering period defined by $start and $end
+ */
+function _uc_buyingclub_get_ordering_period_header($start, $end) {
+  $date_format = "ga l\, M jS Y";
+  return 'Orders placed from '. 
+    date($date_format, $start) .' to '. 
+    date($date_format, $end) .'<br /><br />';
+}

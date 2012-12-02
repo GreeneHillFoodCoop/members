@@ -1,0 +1,35 @@
+<?php
+
+function civicrm_civicrm_buildForm( $formName, &$form )
+{
+    $defaults = array();	
+    $id = null;
+    
+    if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
+		$id = $form->getVar('_id');
+       
+switch($id) {
+            case 5:
+                $defaults = array('amount'             => 175,
+                                  'is_recur'           => 1,
+                                  'frequency_interval' => '1',
+                                  'frequency_unit'     => 'month',
+                                  'installments'       => 7 );
+                break;
+        }
+
+        if (count($defaults)) {
+            $form->setDefaults($defaults);
+
+            // also freeze these elements
+            $elementNames = array_keys($defaults);
+
+            foreach ($elementNames as $element) {
+	    	    if($form->e$element !== 'amount') {
+	          	$elm =& $form->getElement($element);
+ 	          	$elm->freeze();
+			}
+            }
+        }
+    }
+}

@@ -1,0 +1,549 @@
+@charset "utf-8";
+
+@import url("./css/tripoli.base.css");
+@import url("./css/tripoli.type.css");
+@import url("./css/tripoli.visual.css");
+
+
+body {background:#FFF; color:#000; font-family:Arial, Helvetica, sans-serif; }
+
+
+#content {
+float : left;
+}
+
+
+
+#main {
+	width: 980px;
+    margin: 0px auto;
+padding : 10px;
+    margin: 0px auto;
+}
+#page {
+	width: 700px;
+    margin: 0px auto;
+}
+#page p, #page h2 {
+	padding: 5px 35px;
+}
+
+#head {
+	overflow: hidden;
+	height: 156px;
+
+}
+#head #logo, #head h1, #head #nav, #head #forms {
+float : left;		
+}
+
+#head h1, .sidebar h3 {
+font-size: 4em;
+margin: 10px 0px 15px 0px;
+font-family: impact, arial black, helvetica;
+text-transform: uppercase;
+padding-left: -1000px;
+}
+.sidebar h3 {
+font-size: 1.7em;
+}
+#head #menu {
+	width: 428px;
+	margin: 0px 108px 0px 45px;
+}
+#head #forms {
+	display: block;
+	height: 156px;
+	width: 180px;
+	overflow: hidden;
+	margin-top: 7px;
+}
+#head #forms input {
+	border: 1px solid #4c4d4f;
+	margin-bottom: 5px;
+}
+#head #forms input.button {border: 0px!important; position: relative; left: -2px;}
+#head #forms img {
+	display: block;
+	margin: 2px 0px 10px 2px;
+}
+#head input.shot {
+	width: 133px;
+	float: left;
+}
+#head input.long {
+	width: 167px;
+}
+#head input.shot, #head input.long {
+	height: 18px;
+}
+
+
+
+/* Navigation */
+
+
+
+body.about #head #nav {
+background : transparent url(http://content.greenehillfood.coop/wp-content/themes/greenehill/images/nav/about.png) no-repeat;
+}
+
+body.community #head #nav {
+background : transparent url(http://content.greenehillfood.coop/wp-content/themes/greenehill/images/nav/community.png) no-repeat;
+}
+
+body.food #head #nav {
+background : transparent url(http://content.greenehillfood.coop/wp-content/themes/greenehill/images/nav/food.png) no-repeat;
+}
+
+body.join-us #head #nav {
+background : transparent url(http://content.greenehillfood.coop/wp-content/themes/greenehill/images/nav/joinus.png) no-repeat;
+}
+
+body.news #head #nav {
+background : transparent url(http://content.greenehillfood.coop/wp-content/themes/greenehill/images/nav/news.png) no-repeat;
+}
+
+
+#head #nav {
+background : transparent url(http://content.greenehillfood.coop/wp-content/themes/greenehill/images/nav/master.png) no-repeat;
+	width: 380px;
+	height : 136px;
+	margin: 7px 156px 0px 45px;
+}
+
+#head #nav {
+list-style-type : none;
+padding : 10px 0 0 3px;
+}
+
+#head #nav li a {
+margin : 0;
+padding : 0;
+text-indent : -9999em;
+overflow : hidden; 
+float : left;
+width : 58px;
+height : 58px;
+}
+
+
+#head li#nav-about a {
+margin-left : 5px;
+}
+
+#head li#nav-community a {
+margin-top : 58px;
+}
+
+#head li#nav-food a {
+margin-left : 52px;
+margin-top : 58px;
+}
+
+#head li#nav-news a {
+margin-top : 58px;
+}
+
+
+
+
+
+#searchform label {
+font-family: impact, arial black, helvetica;
+font-size : 1.6em;
+color : #026636;
+}
+
+#subnav, 
+#subnav li {
+list-style-type : none !important;
+background : none !important;
+float : left;
+margin-left : 0;
+padding-left : 0;
+}
+
+#subnav {
+margin-left : -1em;
+}
+
+#subnav li a {
+margin-left : 1em;
+text-decoration : none;
+color : #6FBE44;
+}
+
+#subnav li a:hover {
+color : #026636;
+}
+
+
+#head #forms {
+	display: block;
+	height: 156px;
+	width: 180px;
+	overflow: hidden;
+	margin-top: 7px;
+}
+#head #forms input {
+	border: 1px solid #4c4d4f;
+	margin-bottom: 5px;
+}
+#head #forms input.button {border: 0px!important; position: relative; left: -2px;}
+#head #forms img {
+	display: block;
+	margin: 2px 0px 10px 2px;
+}
+#head input.shot {
+	width: 133px;
+	float: left;
+}
+#head input.long {
+	width: 167px;
+}
+#head input.shot, #head input.long {
+	height: 18px;
+}
+
+
+
+/* FOOTER */
+#foot {
+	clear: both;
+	padding: 0px 0px 10px 265px;
+	font-size: .75em;
+	width: 715px;
+}
+#foot a {color: #000; text-decoration: none; margin: 0px 4px 0px 0px;}
+#foot a:hover {text-decoration: underline}
+#foot span {display: block}
+#foot span, #foot span a {
+	color: #026636;
+}
+
+/* CONTENT */
+#sidebarL, #center, #sidebarR {
+	float: left;
+}
+#sidebarL {
+	width: 220px;
+	margin: 10px 10px 0 0;
+}
+#sidebarR {
+	width: 170px;
+	margin-top: 7px;
+	margin-bottom:20px;
+}
+#center {
+	width: 720px;
+	/*overflow: hidden;*/
+	margin: 10px 0 10px 0;
+
+}
+
+#sidebarL p,#sidebarR p {
+margin-bottom: 15px;
+}
+	
+	
+#sidebarL a,#sidebarR a {color: #000;}
+#sidebarL small,#sidebarR small {
+}
+#content h2 {
+	margin-bottom: 10px;
+}
+#content h4 {
+font-size: 3.2em;
+margin:  0px 0px 15px 0px;
+font-family: impact, arial black, helvetica, sans-serif;
+text-transform: uppercase;
+}
+#center h2 {
+	//margin-bottom: 15px;
+}
+#center p {
+	margin-bottom: 20px;
+
+	line-height : 1.2em;
+}
+
+#center p.ans {
+
+	margin: 0px;
+}
+#center p.photoauhtor {
+	font-weight: bold;
+ 	margin: 3px 0px 5x 0px;
+ 	margin-bottom: 10px !important;
+}
+
+#center table th {
+	text-align: left;
+}
+
+#center .block {
+	margin-bottom: 30px;
+}
+
+#center .block img {
+	float: left;
+	margin: 3px 10px 0px 0px;
+}
+#center .block h2 {
+	margin-bottom: 5px;
+}
+#center .block p {
+
+	margin-bottom: 5px;
+
+
+}
+#center #form {color: #4c4d4f; //margin-top: 20px;}
+#center #form #email {
+	width: 462px;
+	border: 1px solid #4c4d4f;
+
+	height: 25px;
+	margin-top: 3px;
+}
+#center #form #send {
+	margin-top: 10px;
+	float: right;
+}
+#center #form textarea {
+	height: 200px!important;
+}
+
+
+
+.submenu {margin-bottom: 20px;}
+.submenu h2 {
+	margin-bottom: 0px!important;
+	padding: 0px;
+	//margin-bottom: 5px!important; }
+.submenu a {
+	display: block;
+
+ 	font-weight: bold;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+.submenu a:hover { text-decoration: underline;}
+#orange a {color:#f8981d;}
+#loworange a {color:#f79768;}
+#darkred a {color: #630b0c;}
+#red a {color: #ca2026;}
+#blue a {color: #6ac9ca;}
+
+
+
+.block-civicrm .content {
+font-size : 1em;
+}
+
+.block-civicrm .content form div {
+padding : 0;
+}
+
+.block-civicrm .content {
+font-size : 1em;
+}
+
+#civicrm-menu, 
+#root-menu-div .menu-item {
+font-size : 1.1em;	
+}
+
+#page-civicrm-contribute-transact #crm-container .messages {
+display : none;
+}
+.block-civicrm div#recently-viewed ul li {
+    padding-left: 22px !important;
+}
+ul#actions li {
+    float: left;
+}
+div.helpicon {
+    width: 16px;
+}
+
+#crm-container td ul.panel {
+    margin-left: -60px !important;
+}
+#crm-container th a.sorting, 
+#crm-container th a.sorting_asc, 
+#crm-container th a.sorting_desc  {
+    padding-right: 20px;
+}
+
+/* matias: mark visited links in membership console */
+#crm-container a, #crm-container a:visited {
+  color: #99C;
+}
+
+a.action-item {
+    display: block;
+    white-space: nowrap;
+}
+
+
+/*
+ * ubercart modifications
+ */
+
+/* make it more obvious how one gets back to the catalog from the cart */
+#cart-form-pane #cart-form-buttons #continue-shopping-link,
+#page-cart.section-cart .breadcrumb {
+    font-weight: bold;
+    font-size: 120%;
+}
+
+/* make cart block more compact */
+table.cart-block-summary ul {
+    margin: 0;
+}
+
+
+
+.separator {
+	display: block;
+	position: relative;
+	top: -3px;
+}
+.lvlheader {
+	margin-top: 10px;
+}
+.lowheight {
+	margin-top: 5px;
+	margin-bottom: 7px!important;
+}
+
+
+.greenlink {font-weight: bold; color:#6fbe44;}
+.orangelink {font-weight: bold; color:#f8981d;}
+.darkredlink {font-weight: bold; color: #630b0c;}
+.redlink {font-weight: bold; color: #ca2026;}
+
+
+
+#user-login-form .form-item {
+padding-bottom : 0;
+margin : 0;
+}
+
+#user-login-form .form-item label {
+text-align : left;
+font-size : .8em;
+font-weight : normal;
+
+}
+
+#user-login-form .form-item input { 
+padding : .2em;
+margin : 0;
+font-size : .8em;
+float : left;
+clear : both;
+margin-right : 3em;
+}
+
+#edit-submit {
+margin : 0;
+font-size : .9em;
+padding : 0;
+}
+
+
+/* CiviCRM membership sign-up pages */
+.membership-group {
+/* reverted by matias display : none; */
+}
+
+.last_name-section span.description {
+display : none;	
+}
+
+
+
+
+
+.custom_9-section {
+border-top : 3px outset #ccc;
+padding-top : 3em;
+}
+
+.custom_9-section .label label, 
+.custom_10-section .label label, 
+.custom_7-section .label label, 
+.-section .label label, 
+.custom_5-section .label label {
+float : left;
+width : 500px;
+text-align : left;
+}
+
+.custom_9-section .content, 
+.custom_10-section .content, 
+.custom_7-section .content, 
+.-section .content, 
+.custom_5-section .content {
+float : left;
+clear : both;
+}
+
+
+
+.content ul.menu {
+margin-left : 0;
+}
+
+
+.content ul.menu li {
+padding-left : 1em;
+}
+
+
+#sidebarL .content ul.menu li a, 
+#sidebarL .content ul.menu li a:visited {
+color : #026636;
+text-decoration : underline;
+}
+
+#sidebarL .content ul.menu li a:hover {
+text-decoration : none; 
+color : #6FBE44;
+}
+
+
+
+#crm-submit-buttons {
+clear : both;
+float : right;
+margin-bottom : 2em;
+}
+
+#crm-submit-buttons .form-submit {
+float : right;
+}
+
+
+.is_recur-section .content {
+display : none;
+}
+
+
+.dataTables_wrapper {
+overflow : scroll;
+}
+
+body#page-buyingclub-preview div.view table.views-table td,
+body#page-buyingclub-preview div.view table.views-table tr {
+    background-color: transparent !important;
+}
+body#page-buyingclub-preview div.view table.views-table {
+    background-image: url(/themes/greenehill/images/greenehill/sample.png);
+}
+body#page-buyingclub-preview div.view table.views-table caption {
+    font-size: 24px;
+}

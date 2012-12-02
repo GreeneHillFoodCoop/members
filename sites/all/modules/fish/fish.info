@@ -1,0 +1,6 @@
+name = Fish Module
+description = Implement CiviCRM and Drupal hooks for Fish
+dependencies[] = civicrm
+package = CiviCRM
+core = 6.x
+version = 2.2

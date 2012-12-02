@@ -1,0 +1,270 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Install hooks for uc_buyingclub.module.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function uc_buyingclub_schema() {
+  $schema = array();
+
+  $schema['uc_buyingclub_ordering_periods'] = array(
+    'description' => 'Periods of time during which users can place buying club orders.',
+    'fields' => array(
+      'ordering_period_id' => array(
+        'description' => 'Primary key: the ordering period ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'start' => array(
+        'description' => 'The Unix timestamp indicating when the ordering period starts.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'end' => array(
+        'description' => 'The Unix timestamp indicating when the ordering period ends.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'pickup' => array(
+        'description' => 'The Unix timestamp indicating when the pickup date is.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('ordering_period_id'),
+  );
+
+  $schema['uc_buyingclub_order_products'] = array(
+    'description' => 'Buying club products associated with orders.',
+    'fields' => array(
+      'uc_buyingclub_order_product_id' => array(
+        'description' => 'Primary key: the order product ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'order_product_id' => array(
+        'description' => 'The {uc_order_products}.order_product_id.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'status' => array(
+        'description' => 'The status of the order product--ordered, received',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'qty' => array(
+        'description' => 'The number of the same product ordered.',
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'finalized' => array(
+        'description' => 'The Unix timestamp indicating when the order was finalized--when the final order was placed with the distributor.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'order_product_id' => array('order_product_id'),
+    ),
+    'primary key' => array('uc_buyingclub_order_product_id'),
+  );
+
+  $schema['uc_buyingclub_products'] = array(
+    'description' => 'Details for products for given ordering periods.',
+    'fields' => array(
+      'uc_buyingclub_product_id' => array(
+        'description' => 'Primary key: the buyingclub product ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'ordering_period_id' => array(
+        'description' => 'The {uc_buyingclub_ordering_periods}.ordering_period_id.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'product_id' => array(
+        'description' => 'The {uc_products}.product_id.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'status' => array(
+        'description' => 'The status of the product--ordered, received',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'qty_ordered' => array(
+        'description' => 'The quantity of the product ordered.',
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'qty_old_overstock' => array(
+        'description' => 'The quantity of the product left over from the last ordering period.',
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'qty_overstock' => array(
+        'description' => 'The quantity of the product expected to be overstock.',
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'finalized' => array(
+        'description' => 'The Unix timestamp indicating when the order was finalized--when the final order was placed with the distributor.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'ordering_period_id' => array('ordering_period_id'),
+      'product_id' => array('product_id'),
+    ),
+    'primary key' => array('uc_buyingclub_product_id'),
+  );
+
+  return $schema;
+}
+
+/*
+ * add uc_buyingclub_products table
+ */
+function uc_buyingclub_update_6000() {
+  $schema['uc_buyingclub_products'] = array(
+    'description' => 'Details for products for given ordering periods.',
+    'fields' => array(
+      'uc_buyingclub_product_id' => array(
+        'description' => 'Primary key: the buyingclub product ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'ordering_period_id' => array(
+        'description' => 'The {uc_buyingclub_ordering_periods}.ordering_period_id.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'product_id' => array(
+        'description' => 'The {uc_products}.product_id.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'qty_ordered' => array(
+        'description' => 'The quantity of the product ordered.',
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'qty_overstock' => array(
+        'description' => 'The quantity of the product expected to be overstock.',
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'finalized' => array(
+        'description' => 'The Unix timestamp indicating when the order was finalized--when the final order was placed with the distributor.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'ordering_period_id' => array('ordering_period_id'),
+      'product_id' => array('product_id'),
+    ),
+    'primary key' => array('uc_buyingclub_product_id'),
+  );
+
+  $ret = array();
+  db_create_table($ret, 'uc_buyingclub_products', $schema['uc_buyingclub_products']);
+  return $ret;
+}
+
+function uc_buyingclub_update_6001() {
+  $ret = array();
+  db_add_field($ret, 'uc_buyingclub_order_products', 'status', 
+    array(
+      'description' => 'The status of the order product--ordered, received',
+      'type' => 'varchar',
+      'length' => 32,
+      'not null' => TRUE,
+      'default' => '',
+    ));
+  db_add_field($ret, 'uc_buyingclub_products', 'status',
+    array(
+      'description' => 'The status of the product--ordered, received',
+      'type' => 'varchar',
+      'length' => 32,
+      'not null' => TRUE,
+      'default' => '',
+    ));
+  return $ret;
+}
+
+function uc_buyingclub_update_6002() {
+  $ret = array();
+  db_add_field($ret, 'uc_buyingclub_products', 'qty_old_overstock',
+    array(
+      'description' => 'The quantity of the product left over from the last ordering period.',
+      'type' => 'int',
+      'size' => 'small',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+    ));
+  return $ret;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function uc_buyingclub_install() {
+  drupal_install_schema('uc_buyingclub');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function uc_buyingclub_uninstall() {
+  drupal_uninstall_schema('uc_buyingclub');
+}

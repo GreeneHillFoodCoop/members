@@ -1,0 +1,8 @@
+; $Id$
+name = Multi-Buy
+description = "Catalog display type allowing buying multiple items with one click"
+dependencies[] = uc_catalog
+dependencies[] = uc_store
+version=6.x-2.3
+package = "Ubercart - extra"
+core = 6.x

@@ -1,0 +1,67 @@
+<?php
+
+/*
+ * hook_theme_registry_alter
+ */
+function uc_buyingclub_catalog_theme_registry_alter(&$theme_registry) {
+  $modulepath = drupal_get_path('module', 'uc_buyingclub_catalog');
+
+  $originalpath = array_shift($theme_registry['uc_catalog_browse']['theme paths']);
+  array_unshift($theme_registry['uc_catalog_browse']['theme paths'], $originalpath, $modulepath);
+  $theme_registry['uc_catalog_browse']['function'] = 'theme_uc_buyingclub_catalog_browse';
+
+  $originalpath = array_shift($theme_registry['breadcrumb']['theme paths']);
+  array_unshift($theme_registry['breadcrumb']['theme paths'], $originalpath, $modulepath);
+  $theme_registry['breadcrumb']['function'] = 'theme_uc_buyingclub_catalog_breadcrumb';
+}
+
+function theme_uc_buyingclub_catalog_breadcrumb($breadcrumb) {
+  if (empty($breadcrumb)) {
+    return '';
+  }
+
+  $is_catalog_front = preg_match('|catalog(/0?)?$|', request_uri()) > 0;
+  $is_catalog = preg_match('|catalog/\d+$|', request_uri()) > 0;
+
+  if ($is_catalog_front) {
+    $breadcrumb = array();
+  }
+  else if ($is_catalog) {
+    // TODO make this more prominent?
+    $breadcrumb = array(
+      l(t('Back to categories'), 'catalog'), 
+    );
+  }
+
+  return '<div class="breadcrumb">' . implode(' » ', $breadcrumb) . '</div>';
+}
+
+/*
+ * let user know when last ordering period was, when current one ends.
+ */
+function theme_uc_buyingclub_catalog_browse($tid = 0) {
+  $period = _uc_buyingclub_get_most_recent_ordering_period();
+  $date_format = "ga \o\\n l\, M jS Y";
+
+  if ($period->end > time()) {
+    drupal_set_message('The current ordering period is from <b>'. date($date_format, $period->start) .'</b> to <b>'. date($date_format, $period->end) .'</b>', $type='status', $repeat=FALSE);
+  }
+  else {
+    drupal_set_message('The most recent ordering period was from <b>'. date($date_format, $period->start) .'</b> to <b>'. date($date_format, $period->end) .'</b>', $type='error', $repeat=FALSE);
+
+    // only let admins see catalog all the time
+    if (!user_access('administer uc_buyingclub')) {
+      $next_period = _uc_buyingclub_get_next_ordering_period();
+      $out = "Sorry, ordering is not currently open. Please come back during the next ordering period.";
+      if ($next_period) {
+        $out .= ' It will be from <b>'. date($date_format, $next_period->start) .'</b> to <b>'. date($date_format, $next_period->end) .'</b>';
+      }
+      return $out;
+    }
+  }
+
+  drupal_add_js(drupal_get_path('module', 'uc_buyingclub') .'/jquery.example.min.js');
+  drupal_add_js(drupal_get_path('module', 'uc_buyingclub') .'/uc_buyingclub.js');
+  return theme_uc_catalog_browse($tid);
+}
+

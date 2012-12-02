@@ -1,0 +1,14 @@
+6.x-2.3 2010-01-11
+ - Upgraded to work with Ubercart 6.x-2.2
+ - Fixed some silly edge cases (eg required attributes with checkboxes widget)
+
+6.x-2.2 2009-06-09
+ - Fixed compatability issue with ubercart 6.x-2.x-rc3.
+
+6.x-2.1 2009-03-26
+ - Fixed compatability with changes in uc_donation
+
+6.x-2.0 2009-03-04
+ - Initial 6.x release, funded by data-scribe (www.data-scribe.biz)
+ - Added support for uc_donation
+ 

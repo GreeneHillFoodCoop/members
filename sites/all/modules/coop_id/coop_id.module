@@ -1,0 +1,66 @@
+<?php
+// $Id$
+
+define('COOP_ID_FIELD', 'custom_16');
+define('COOP_ID_TABLE', 'civicrm_value_members_3');
+define('COOP_ID_COLUMN', 'coop_id_16');
+
+/*
+ * hooks
+ */
+function coop_id_civicrm_post($op, $objectName, $objectId, &$objectRef) {
+  if ($op == 'create' && $objectName == 'Membership') {
+    $type_id = $objectRef->membership_type_id;
+    if (!($type_id == '4' || $type_id == '5' || $type_id == '6' || $type_id == '7')) { 
+      // not a co-op membership, don't assign an id
+      return;
+    }
+
+    $contact_id = $objectRef->contact_id;
+    if (_coop_id_get_current_coop_id($contact_id)) {
+      // contact already has a coop id, don't give a new one
+      return;
+    }
+
+    $coop_id = _coop_id_get_next_coop_id();
+    _coop_id_assign_coop_id($contact_id, $coop_id);
+  }
+}
+
+/*
+ * Assign the contact with id=$contact_id the given Coop ID.
+ */
+function _coop_id_assign_coop_id($contact_id, $coop_id) {
+  require_once 'CRM/Core/BAO/CustomValueTable.php';
+
+  $set_params = array(
+    'entityID' => $contact_id,
+    COOP_ID_FIELD => $coop_id
+  );
+  CRM_Core_BAO_CustomValueTable::setValues($set_params);
+}
+
+/*
+ * Get the next Coop ID value, system-wide.
+ */
+function _coop_id_get_next_coop_id() {
+  $query = "SELECT ". COOP_ID_COLUMN ." AS coop_id FROM {". COOP_ID_TABLE ."} ORDER BY ". COOP_ID_COLUMN ." DESC LIMIT 1;";
+  $result = db_query($query);
+  if ($result) {
+    return db_fetch_object($result)->coop_id + 1;
+  }
+}
+
+/*
+ * Get a contact's current Coop ID, if any, given their id.
+ */
+function _coop_id_get_current_coop_id($contact_id) {
+  require_once 'CRM/Core/BAO/CustomValueTable.php';
+
+  $get_params = array(
+    'entityID' => $objectRef->contact_id,
+    COOP_ID_FIELD => 1
+  );
+  $values = CRM_Core_BAO_CustomValueTable::getValues($get_params);
+  return $values[COOP_ID_FIELD];
+}

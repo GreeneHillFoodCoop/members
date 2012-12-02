@@ -1,0 +1,3 @@
+sites/default
+*.gz
+sites/all/modules/civicrm/CRM/Upgrade

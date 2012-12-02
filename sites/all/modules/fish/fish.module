@@ -1,0 +1,33 @@
+<?php
+
+function fish_civicrm_buildForm( $formName, &$form )
+{
+    $defaults = array();	
+    $id = null;
+    
+    if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
+		$id = $form->getVar('_id');
+       
+switch($id) {
+            case 5555:  // [matias] was 5, the Carrot plan
+                $defaults = array(////////// 'amount'             => 423, // the value of the amount radio NOT the dollar amount for installments
+                                  'is_recur'           => 1,
+                                  'frequency_interval' => '1',
+                                  'frequency_unit'     => 'month',
+                                  'installments'       => 7 );
+                break;
+        }
+
+        if (count($defaults)) {
+            $form->setDefaults($defaults);
+
+            // also freeze these elements
+            $elementNames = array_keys($defaults);
+
+            foreach ($elementNames as $element) {
+		$elm =& $form->getElement($element);
+		$elm->freeze();
+            }
+        }
+    }
+}
