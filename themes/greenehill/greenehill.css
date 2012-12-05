@@ -4,6 +4,26 @@
 @import url("./css/tripoli.type.css");
 @import url("./css/tripoli.visual.css");
 
+/* STAGING only */
+body::before,
+body::after {
+  content: "staging";
+  position: fixed;
+  font-size: 100px;
+  text-transform: uppercase;
+  top: 300px;
+  left: -150px;
+  -webkit-transform: rotate(-90deg);
+  color: red;
+  opacity: .3;
+}
+
+body::after {
+  right: -150px;
+  left: auto;
+  -webkit-transform: rotate(90deg);
+}
+/* END STAGING ONLY */
 
 body {background:#FFF; color:#000; font-family:Arial, Helvetica, sans-serif; }
 
