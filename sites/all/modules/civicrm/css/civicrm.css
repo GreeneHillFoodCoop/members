@@ -329,7 +329,7 @@ div.spacer,
     background: none;
     border: medium none;
     background-color: transparent;
-    color: #3E3E3E;
+    color: /* matias test #3E3E3E */ #2900FF; 
     position: relative;
     text-indent: 0px;
     width: auto;
