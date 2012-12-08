@@ -62,20 +62,20 @@
 		<h1><a id="logo" href="<?php echo $front_page ?>"><img src="/<?php echo $directory; ?>/images/greenehill/logo.gif"></a></h1>
 		
 		<ul id="nav">
-		    				<li id="nav-about"><a href="http://content.greenehillfood.coop/about">        About      </a></li>
-		    				<li id="nav-community"><a href="http://content.greenehillfood.coop/community">    Community      </a></li>
-		    				<li id="nav-food"><a href="http://content.greenehillfood.coop/food">         Food      </a></li>
-		    				<li id="nav-joinus"><a href="http://content.greenehillfood.coop/join-us">Join Us      </a></li>
-		    				<li id="nav-news"><a href="http://content.greenehillfood.coop/news">   News      </a></li>
+		    				<li id="nav-about"><a href="http://www.greenehillfood.coop/about">        About      </a></li>
+		    				<li id="nav-community"><a href="http://www.greenehillfood.coop/community">    Community      </a></li>
+		    				<li id="nav-food"><a href="http://www.greenehillfood.coop/food">         Food      </a></li>
+		    				<li id="nav-joinus"><a href="http://www.greenehillfood.coop/join-us">Join Us      </a></li>
+		    				<li id="nav-news"><a href="http://www.greenehillfood.coop/news">   News      </a></li>
 		 </ul>
 		
 		
 			<ul id="subnav">
-				<li><a href="http://members.greenehillfood.coop/user">Member Login</a></li>
-				<li><a href="http://content.greenehillfood.coop/about/contact-us/">Contact Us</a></li>				
+				<li><a href="/user">Member Login</a></li>
+				<li><a href="http://www.greenehillfood.coop/about/contact-us/">Contact Us</a></li>				
 			</ul>								
  		<div id="forms">
-				<form id="searchform" class="search" method="get" action="http://content.greenehillfood.coop">
+				<form id="searchform" class="search" method="get" action="http://www.greenehillfood.coop">
 					<label for="s">Search:</label>
 					<input type="text" name="s" id="s" size="15" />
 					<input type="submit" class="submit" value="Go" />
