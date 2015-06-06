@@ -1,9 +1,8 @@
 CHANGELOG.txt
 includes/bootstrap.inc
-includes/file.inc
-includes/form.inc
-includes/xmlrpc.inc
-misc/ahah.js
+includes/common.inc
+includes/menu.inc
+includes/session.inc
 modules/aggregator/aggregator.info
 modules/block/block.info
 modules/blog/blog.info
@@ -20,7 +19,6 @@ modules/locale/locale.info
 modules/menu/menu.info
 modules/node/node.info
 modules/openid/openid.info
-modules/openid/xrds.inc
 modules/path/path.info
 modules/php/php.info
 modules/ping/ping.info
@@ -39,6 +37,8 @@ modules/trigger/trigger.info
 modules/update/update.info
 modules/upload/upload.info
 modules/user/user.info
+modules/user/user.module
+modules/user/user.pages.inc
 themes/bluemarine/bluemarine.info
 themes/chameleon/chameleon.info
 themes/chameleon/marvin/marvin.info
